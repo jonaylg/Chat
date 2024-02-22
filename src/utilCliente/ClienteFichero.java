@@ -1,6 +1,8 @@
 package utilCliente;
 
 
+import datos.Cuadro;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -43,6 +45,8 @@ static Scanner sc=new Scanner(System.in);
 	            DataInputStream flujo_entrada = new DataInputStream(in);
 	            System.out.println(flujo_entrada.readUTF());
 			}
+			Cuadro c=new Cuadro();
+			c.setVisible(true);
 			System.out.println("Ya puedes escribir");
 			final String nickname=nick; 
 			
@@ -55,6 +59,7 @@ static Scanner sc=new Scanner(System.in);
                         String mensaje;
                         while ((mensaje = flujo_entrada.readUTF()) != null) {
                             System.out.println(mensaje);
+							c.enviarMensaje();
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
