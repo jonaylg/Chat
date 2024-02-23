@@ -18,8 +18,6 @@ static Scanner sc=new Scanner(System.in);
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		Cuadro c=new Cuadro();
-		c.setVisible(true);
 
 		try {
 			Socket sCliente = new Socket("127.0.0.1", 6001);
@@ -39,7 +37,11 @@ static Scanner sc=new Scanner(System.in);
 	            if (flujo_entrada.readUTF().equalsIgnoreCase("correcto")) {
 					repetido=false;
 				}
-			} while (repetido);			
+			} while (repetido);
+
+			Cuadro c=new Cuadro(nick);
+			c.setVisible(true);
+
 			System.out.println("quieres ver los mensajes anteriores?");
 			if (sc.nextLine().equalsIgnoreCase("si")) {
 				OutputStream out = sCliente.getOutputStream();
@@ -87,7 +89,6 @@ static Scanner sc=new Scanner(System.in);
                             if (!texto.equalsIgnoreCase("")&&texto!=null){
 								flujo_salida.writeUTF(nickname+": "+texto);
 							}
-							System.out.println("hola");
                         } while (!texto.equalsIgnoreCase("fin"));
                         flujo_salida.close();
                         sCliente.close();
