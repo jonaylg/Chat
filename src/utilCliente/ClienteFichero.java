@@ -17,6 +17,10 @@ public class ClienteFichero extends Thread{
 static Scanner sc=new Scanner(System.in);
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+
+		Cuadro c=new Cuadro();
+		c.setVisible(true);
+
 		try {
 			Socket sCliente = new Socket("127.0.0.1", 6001);
 			System.out.println("conectado");
@@ -43,10 +47,11 @@ static Scanner sc=new Scanner(System.in);
 	            flujo_salida.writeUTF("mensajes_anteriores");
 	            InputStream in = sCliente.getInputStream();
 	            DataInputStream flujo_entrada = new DataInputStream(in);
-	            System.out.println(flujo_entrada.readUTF());
+				String mensaje=flujo_entrada.readUTF();
+	            System.out.println(mensaje);
+				c.recibirMensaje(mensaje);
 			}
-			Cuadro c=new Cuadro();
-			c.setVisible(true);
+
 			System.out.println("Ya puedes escribir");
 			final String nickname=nick; 
 			
@@ -59,7 +64,7 @@ static Scanner sc=new Scanner(System.in);
                         String mensaje;
                         while ((mensaje = flujo_entrada.readUTF()) != null) {
                             System.out.println(mensaje);
-							c.enviarMensaje();
+							c.recibirMensaje(mensaje);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -77,8 +82,12 @@ static Scanner sc=new Scanner(System.in);
                         DataOutputStream flujo_salida = new DataOutputStream(out);
                         String texto;
                         do {
-                            texto = sc.nextLine();
-                            flujo_salida.writeUTF(nickname+": "+texto);
+                            texto = c.esperarEnter();
+							//texto = sc.nextLine();
+                            if (!texto.equalsIgnoreCase("")&&texto!=null){
+								flujo_salida.writeUTF(nickname+": "+texto);
+							}
+							System.out.println("hola");
                         } while (!texto.equalsIgnoreCase("fin"));
                         flujo_salida.close();
                         sCliente.close();
